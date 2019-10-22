@@ -84,4 +84,15 @@ public class Vector {
 	public Vector ScalarMultiply(double s) {
 		return new Vector(this.XComponent * s, this.YComponent * s);
 	}
+	
+	/**
+	 * 
+	 * @param v1
+	 * @return the scalar projection of "this vector" onto v1
+	 */
+	public double proj(Vector v1)
+	{
+		return(this.Dot(v1)/v1.getmagnitude()))
+	}
+	
 }
