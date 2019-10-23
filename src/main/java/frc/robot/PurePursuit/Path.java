@@ -47,9 +47,11 @@ public class Path {
 			smoothedPoints[i].setTargetVelocityAtPoint(10); // inches per second
 			if (i != 0) {
 				smoothedPoints[i].setDistanceAlongPathAtPoint(
-						smoothedPoints[i-1].getPoint().distanceTo(smoothedPoints[i].getPoint()) + smoothedPoints[i - 1].getDistanceAlongPathAtPoint());
+						smoothedPoints[i - 1].getPoint().distanceTo(smoothedPoints[i].getPoint())
+								+ smoothedPoints[i - 1].getDistanceAlongPathAtPoint());
 				if (i != smoothedPoints.length - 1) {
-					smoothedPoints[i].setCurvatureAtPoint(smoothedPoints[i].getPoint().getCurvatureFromThreePoints(smoothedPoints[i - 1].getPoint(), smoothedPoints[i + 1].getPoint()));
+					smoothedPoints[i].setCurvatureAtPoint(smoothedPoints[i].getPoint().getCurvatureFromThreePoints(
+							smoothedPoints[i - 1].getPoint(), smoothedPoints[i + 1].getPoint()));
 				}
 			}
 		}
@@ -78,7 +80,8 @@ public class Path {
 	 *            object (contains an array of smoothed WayPoints)
 	 * @param robotLocation
 	 *            current robot coordinate position
-	 * @return the index of the WayPoint on the path that is closest to the robot
+	 * @return the index of the WayPoint on the path that is closest to the
+	 *         robot
 	 */
 	public int findClosestPointTo(CoordinatePoint robotLocation) {
 		ArrayList<Double> distances = new ArrayList<Double>();
@@ -99,36 +102,46 @@ public class Path {
 	 *            CoordinatePoint with radius of lookahead distance
 	 * @param lookaheadDistance
 	 *            radius of the circle (lookahead distance)
-	 * @return Coordinate Point on the line segment (defined by startPointofSegment and endPointofSegment) and is lookaheadDistance away from the robot location
+	 * @return Coordinate Point on the line segment (defined by
+	 *         startPointofSegment and endPointofSegment) and is
+	 *         lookaheadDistance away from the robot location
 	 */
-	public CoordinatePoint findLookaheadPoint(CoordinatePoint startPointofSegment, CoordinatePoint endPointofSegment,
-			CoordinatePoint robotLocation, double lookaheadDistance) {
-		Vector d = new Vector(startPointofSegment, endPointofSegment);
-		Vector f = new Vector(robotLocation, startPointofSegment);
+	public CoordinatePoint findLookaheadPoint(CoordinatePoint robotLocation, double lookaheadDistance) {
+		boolean pointFound = false;
+		CoordinatePoint startPointofSegment = new CoordinatePoint();
+		CoordinatePoint endPointofSegment = new CoordinatePoint();
+		Vector d = null;
+		for (int i = this.getSmoothedPoints().length - 2; i >= 0 && !pointFound ; i--) {
+			startPointofSegment = this.smoothedPoints[i].getPoint();
+			endPointofSegment = this.smoothedPoints[i + 1].getPoint();
 
-		double a = d.Dot(d);
-		double b = 2 * (f.Dot(d));
-		double c = f.Dot(f) - (lookaheadDistance * lookaheadDistance);
-		double discriminant = b * b - 4 * a * c;
-		double t = 0;
+			d = new Vector(startPointofSegment, endPointofSegment);
+			Vector f = new Vector(robotLocation, startPointofSegment);
 
-		if (discriminant < 0) {
-			System.out.println("No Intersection");
-		} else {
-			discriminant = Math.sqrt(discriminant);
-			double t1 = (-b - discriminant) / (2 * a);
-			double t2 = (-b + discriminant) / (2 * a);
+			double a = d.Dot(d);
+			double b = 2 * (f.Dot(d));
+			double c = f.Dot(f) - (lookaheadDistance * lookaheadDistance);
+			double discriminant = b * b - 4 * a * c;
+			double t = 0;
 
-			if (t1 >= 0 && t1 <= 1) {
-				t = t1;
-			} else if (t2 >= 0 && t2 <= 1) {
-				t = t2;
-			} else {
+			if (discriminant < 0) {
 				System.out.println("No Intersection");
+			} else {
+				discriminant = Math.sqrt(discriminant);
+				double t1 = (-b - discriminant) / (2 * a);
+				double t2 = (-b + discriminant) / (2 * a);
+
+				if (t1 >= 0 && t1 <= 1) {
+					t = t1;
+					pointFound = true;
+				}
+				if (t2 >= 0 && t2 <= 1) {
+					t = t2;
+					pointFound = true;
+				}
 			}
+			d = d.ScalarMultiply(t);
 		}
-		d=d.ScalarMultiply(t);
-		return new CoordinatePoint((startPointofSegment.getX() + d.getXComponent()),
-				(startPointofSegment.getY() + d.getYComponent()));
-	}   
+		return new CoordinatePoint((startPointofSegment.getX() + d.getXComponent()),(startPointofSegment.getY() + d.getYComponent()));
+	}
 }
