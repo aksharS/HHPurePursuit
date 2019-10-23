@@ -75,21 +75,20 @@ public class Path {
 	}
 
 	/**
-	 *
-	 * @param path
-	 *            object (contains an array of smoothed WayPoints)
-	 * @param robotLocation
-	 *            current robot coordinate position
-	 * @return the index of the WayPoint on the path that is closest to the
-	 *         robot
-	 */
-	public int findClosestPointTo(CoordinatePoint robotLocation) {
-		ArrayList<Double> distances = new ArrayList<Double>();
-		for (int i = this.idxOfLastClosestPoint; i < this.smoothedPoints.length; i++) {
-			distances.add(this.smoothedPoints[i].getPoint().distanceTo(robotLocation));
-		}
-		return distances.indexOf(Collections.min(distances));
-	}
+    *
+    * @param path array of coordinate points
+    * @param robotX current robot X position
+    * @param robotY current robot Y position
+    * @return a point on path that is closest to the robot
+    */
+   public WayPoint closestPointTo(CoordinatePoint robotLocation){
+       ArrayList<Double> distances = new ArrayList<Double>();
+       for (int i = this.idxOfLastClosestPoint; i < this.smoothedPoints.length; i++){
+           distances.add(this.smoothedPoints[i].getPoint().distanceTo(robotLocation));
+       }
+       int pointIndex = distances.indexOf(Collections.min(distances));
+       return this.smoothedPoints[pointIndex];
+   }
 
 	/**
 	 *
