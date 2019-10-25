@@ -37,20 +37,15 @@ public class Path {
 		this.setSmoothedPoints(smoothedPoints);
 
 		smoothedPoints[0].setCurvatureAtPoint(0.0);
+		smoothedPoints[0].setTargetVelocityAtPoint(maxRobotVelocity);
 		smoothedPoints[0].setDistanceAlongPathAtPoint(0.0);
-		for (int i = 0; i < smoothedPoints.length; i++) {
-			smoothedPoints[i].setTargetVelocityAtPoint(
-					Math.min(maxRobotVelocity, curvatureCompensation / smoothedPoints[i].getCurvatureAtPoint())); // inches
-																													// per
-																													// second
-			if (i != 0) {
-				smoothedPoints[i].setDistanceAlongPathAtPoint(
-						smoothedPoints[i - 1].getPoint().distanceTo(smoothedPoints[i].getPoint())
-								+ smoothedPoints[i - 1].getDistanceAlongPathAtPoint());
-				if (i != smoothedPoints.length - 1) {
-					smoothedPoints[i].setCurvatureAtPoint(smoothedPoints[i].getPoint().getCurvatureFromThreePoints(
-							smoothedPoints[i - 1].getPoint(), smoothedPoints[i + 1].getPoint()));
-				}
+		smoothedPoints[-1].setCurvatureAtPoint(0.0);
+		smoothedPoints[-1].setTargetVelocityAtPoint(0.0);
+		for (int i = 1; i < smoothedPoints.length; i++) {
+			smoothedPoints[i].setDistanceAlongPathAtPoint(smoothedPoints[i - 1].getPoint().distanceTo(smoothedPoints[i].getPoint())+ smoothedPoints[i - 1].getDistanceAlongPathAtPoint());
+			if (i != smoothedPoints.length - 1) {
+				smoothedPoints[i].setCurvatureAtPoint(smoothedPoints[i].getPoint().getCurvatureFromThreePoints(smoothedPoints[i - 1].getPoint(), smoothedPoints[i + 1].getPoint()));
+				smoothedPoints[i].setTargetVelocityAtPoint(Math.min(maxRobotVelocity, curvatureCompensation / smoothedPoints[i].getCurvatureAtPoint()));
 			}
 		}
 		smoothedPoints[smoothedPoints.length - 1].setCurvatureAtPoint(0.0);
@@ -74,12 +69,9 @@ public class Path {
 
 	/**
 	 *
-	 * @param path
-	 *            array of coordinate points
-	 * @param robotX
-	 *            current robot X position
-	 * @param robotY
-	 *            current robot Y position
+	 * @param path   array of coordinate points
+	 * @param robotX current robot X position
+	 * @param robotY current robot Y position
 	 * @return a point on path that is closest to the robot
 	 */
 	public WayPoint closestPointTo(CoordinatePoint robotLocation) {
@@ -93,18 +85,14 @@ public class Path {
 
 	/**
 	 *
-	 * @param startPointofSegment
-	 *            starting point of the line segment
-	 * @param endPointofSegment
-	 *            end point of the line segment
-	 * @param robotLocation
-	 *            center point of the circle (Robot Location) as a
-	 *            CoordinatePoint with radius of lookahead distance
-	 * @param lookaheadDistance
-	 *            radius of the circle (lookahead distance)
-	 * @return Coordinate Point on the line segment (defined by
-	 *         startPointofSegment and endPointofSegment) and is
-	 *         lookaheadDistance away from the robot location
+	 * @param startPointofSegment starting point of the line segment
+	 * @param endPointofSegment   end point of the line segment
+	 * @param robotLocation       center point of the circle (Robot Location) as a
+	 *                            CoordinatePoint with radius of lookahead distance
+	 * @param lookaheadDistance   radius of the circle (lookahead distance)
+	 * @return Coordinate Point on the line segment (defined by startPointofSegment
+	 *         and endPointofSegment) and is lookaheadDistance away from the robot
+	 *         location
 	 */
 	public CoordinatePoint findLookaheadPoint(CoordinatePoint robotLocation, double lookaheadDistance) {
 		boolean pointFound = false;
