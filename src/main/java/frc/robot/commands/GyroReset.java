@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
 
-public class gyroReset extends Command {
-    public gyroReset() {
+public class GyroReset extends Command {
+    public GyroReset() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     }

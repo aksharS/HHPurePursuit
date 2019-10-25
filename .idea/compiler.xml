@@ -4,6 +4,8 @@
     <bytecodeTargetLevel>
       <module name="Frankie_HandsOn.main" target="11" />
       <module name="Frankie_HandsOn.test" target="11" />
+      <module name="HHPurePursuit.main" target="11" />
+      <module name="HHPurePursuit.test" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

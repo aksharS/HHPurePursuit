@@ -28,6 +28,8 @@ public static double driveP = 0.05;
 public static double driveI = 0.00;
 public static double driveD = 0.00;
 
+public static double x_Location, y_Location = 0;
+
 public static int leftEncoderPort1 = 0;
 public static int leftEncoderPort2 = 1;
 public static int rightEncoderPort1 = 2;
