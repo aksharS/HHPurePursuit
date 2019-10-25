@@ -34,7 +34,7 @@ public class PursuitDrive extends Command {
     @Override
     protected void execute() {
         CoordinatePoint robotLocation = new CoordinatePoint(RobotMap.x_Location, RobotMap.y_Location);
-        while (path.closestPointTo(robotLocation) != path.getSmoothedPoints()[-1]) {
+        while (path.closestPointTo(robotLocation) != path.getSmoothedPoints()[path.getSmoothedPoints().length-1]) {
             long startTime = System.currentTimeMillis();
 
             robotLocation.setCoordinatePoint(RobotMap.x_Location, RobotMap.y_Location);

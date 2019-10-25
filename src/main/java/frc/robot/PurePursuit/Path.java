@@ -37,15 +37,17 @@ public class Path {
 		this.setSmoothedPoints(smoothedPoints);
 
 		smoothedPoints[0].setCurvatureAtPoint(0.0);
-		smoothedPoints[0].setTargetVelocityAtPoint(maxRobotVelocity);
+		//smoothedPoints[0].setTargetVelocityAtPoint(maxRobotVelocity);
+		smoothedPoints[0].setTargetVelocityAtPoint(10.0);
 		smoothedPoints[0].setDistanceAlongPathAtPoint(0.0);
-		smoothedPoints[-1].setCurvatureAtPoint(0.0);
-		smoothedPoints[-1].setTargetVelocityAtPoint(0.0);
+		smoothedPoints[getSmoothedPoints().length-1].setCurvatureAtPoint(0.0);
+		smoothedPoints[getSmoothedPoints().length-1].setTargetVelocityAtPoint(0.0);
 		for (int i = 1; i < smoothedPoints.length; i++) {
 			smoothedPoints[i].setDistanceAlongPathAtPoint(smoothedPoints[i - 1].getPoint().distanceTo(smoothedPoints[i].getPoint())+ smoothedPoints[i - 1].getDistanceAlongPathAtPoint());
 			if (i != smoothedPoints.length - 1) {
 				smoothedPoints[i].setCurvatureAtPoint(smoothedPoints[i].getPoint().getCurvatureFromThreePoints(smoothedPoints[i - 1].getPoint(), smoothedPoints[i + 1].getPoint()));
-				smoothedPoints[i].setTargetVelocityAtPoint(Math.min(maxRobotVelocity, curvatureCompensation / smoothedPoints[i].getCurvatureAtPoint()));
+				//smoothedPoints[i].setTargetVelocityAtPoint(Math.min(maxRobotVelocity, curvatureCompensation / smoothedPoints[i].getCurvatureAtPoint()));
+				smoothedPoints[i].setTargetVelocityAtPoint(10);
 			}
 		}
 		smoothedPoints[smoothedPoints.length - 1].setCurvatureAtPoint(0.0);
