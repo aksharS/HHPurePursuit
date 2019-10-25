@@ -47,7 +47,7 @@ public class Path {
 			if (i != smoothedPoints.length - 1) {
 				smoothedPoints[i].setCurvatureAtPoint(smoothedPoints[i].getPoint().getCurvatureFromThreePoints(smoothedPoints[i - 1].getPoint(), smoothedPoints[i + 1].getPoint()));
 				//smoothedPoints[i].setTargetVelocityAtPoint(Math.min(maxRobotVelocity, curvatureCompensation / smoothedPoints[i].getCurvatureAtPoint()));
-				smoothedPoints[i].setTargetVelocityAtPoint(10);
+				smoothedPoints[i].setTargetVelocityAtPoint(10.0);
 			}
 		}
 		smoothedPoints[smoothedPoints.length - 1].setCurvatureAtPoint(0.0);
