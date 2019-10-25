@@ -6,16 +6,11 @@ import java.util.Collections;
 public class Path {
 	private WayPoint[] unsmoothedPoints;
 	private WayPoint[] smoothedPoints;
-	private double a;
-	private double b;
-	private double tolerance;
 	private int idxOfLastClosestPoint = 0;
 
-	public Path(WayPoint[] unsmoothedPoints, double a, double b, double tolerance) {
+	public Path(WayPoint[] unsmoothedPoints, double a, double b, double tolerance, double maxRobotVelocity,
+			double curvatureCompensation) {
 		this.setunsmoothedPoints(unsmoothedPoints);
-		this.a = a;
-		this.b = b;
-		this.tolerance = tolerance;
 
 		WayPoint[] smoothedPoints = unsmoothedPoints.clone();
 		double change = tolerance;
@@ -44,7 +39,10 @@ public class Path {
 		smoothedPoints[0].setCurvatureAtPoint(0.0);
 		smoothedPoints[0].setDistanceAlongPathAtPoint(0.0);
 		for (int i = 0; i < smoothedPoints.length; i++) {
-			smoothedPoints[i].setTargetVelocityAtPoint(10); // inches per second
+			smoothedPoints[i].setTargetVelocityAtPoint(
+					Math.min(maxRobotVelocity, curvatureCompensation / smoothedPoints[i].getCurvatureAtPoint())); // inches
+																													// per
+																													// second
 			if (i != 0) {
 				smoothedPoints[i].setDistanceAlongPathAtPoint(
 						smoothedPoints[i - 1].getPoint().distanceTo(smoothedPoints[i].getPoint())
@@ -75,20 +73,23 @@ public class Path {
 	}
 
 	/**
-    *
-    * @param path array of coordinate points
-    * @param robotX current robot X position
-    * @param robotY current robot Y position
-    * @return a point on path that is closest to the robot
-    */
-   public WayPoint closestPointTo(CoordinatePoint robotLocation){
-       ArrayList<Double> distances = new ArrayList<Double>();
-       for (int i = this.idxOfLastClosestPoint; i < this.smoothedPoints.length; i++){
-           distances.add(this.smoothedPoints[i].getPoint().distanceTo(robotLocation));
-       }
-       int pointIndex = distances.indexOf(Collections.min(distances));
-       return this.smoothedPoints[pointIndex];
-   }
+	 *
+	 * @param path
+	 *            array of coordinate points
+	 * @param robotX
+	 *            current robot X position
+	 * @param robotY
+	 *            current robot Y position
+	 * @return a point on path that is closest to the robot
+	 */
+	public WayPoint closestPointTo(CoordinatePoint robotLocation) {
+		ArrayList<Double> distances = new ArrayList<Double>();
+		for (int i = this.idxOfLastClosestPoint; i < this.smoothedPoints.length; i++) {
+			distances.add(this.smoothedPoints[i].getPoint().distanceTo(robotLocation));
+		}
+		int pointIndex = distances.indexOf(Collections.min(distances));
+		return this.smoothedPoints[pointIndex];
+	}
 
 	/**
 	 *
@@ -110,7 +111,7 @@ public class Path {
 		CoordinatePoint startPointofSegment = new CoordinatePoint();
 		CoordinatePoint endPointofSegment = new CoordinatePoint();
 		Vector d = null;
-		for (int i = this.getSmoothedPoints().length - 2; i >= 0 && !pointFound ; i--) {
+		for (int i = this.getSmoothedPoints().length - 2; i >= 0 && !pointFound; i--) {
 			startPointofSegment = this.smoothedPoints[i].getPoint();
 			endPointofSegment = this.smoothedPoints[i + 1].getPoint();
 
@@ -141,6 +142,7 @@ public class Path {
 			}
 			d = d.ScalarMultiply(t);
 		}
-		return new CoordinatePoint((startPointofSegment.getX() + d.getXComponent()),(startPointofSegment.getY() + d.getYComponent()));
+		return new CoordinatePoint((startPointofSegment.getX() + d.getXComponent()),
+				(startPointofSegment.getY() + d.getYComponent()));
 	}
 }
