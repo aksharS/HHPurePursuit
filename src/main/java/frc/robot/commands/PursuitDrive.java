@@ -57,6 +57,7 @@ public class PursuitDrive extends Command {
             double targetRobotVelocity = path.closestPointTo(robotLocation).getTargetVelocityAtPoint();
             double targetLeftWheelVelocity = targetRobotVelocity * (2 + signedCurvature * robotTrackWidth) / 2.0;
             double targetRightWheelVelocity = targetRobotVelocity * (2 - signedCurvature * robotTrackWidth) / 2.0;
+            
             System.out.println("robotLocation: " + robotLocation);
             System.out.println("targetRobotVelocity: " + targetRobotVelocity);
             System.out.println("lookAheadPoint: " + lookAheadPoint);
