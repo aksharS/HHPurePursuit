@@ -29,7 +29,7 @@ public class OI {
 
     public OI() {
         driveButton11.whenPressed(new GyroReset());
-        getDriveButton6.whenPressed(new PursuitDrive(Paths.straightTest, 8));
+        getDriveButton6.whenPressed(new PursuitDrive(Paths.getStraightPath(), 8, 10));
     }
   //// CREATING BUTTONS
   // One type of button is a joystick button which is any button on a

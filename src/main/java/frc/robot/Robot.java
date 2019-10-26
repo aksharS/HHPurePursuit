@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.PursuitDrive;
 import frc.robot.commands.TimedDrive;
 import frc.robot.commands.autoDrive;
 import frc.robot.subsystems.DriveBase;
@@ -42,7 +43,8 @@ public class Robot extends TimedRobot {
     m_DriveBase.resetLeftEncoder();
     m_DriveBase.resetRightEncoder();
     m_oi = new OI();
-    // m_chooser.setDefaultOption("Pathfinder Test", new PathDrive(Paths.straightPoints, Paths.configSlow));
+    m_DriveBase.reset();
+    m_chooser.setDefaultOption("PurePursuit Test", new PursuitDrive(Paths.getStraightPath(), RobotMap.trackWidth + 1, 10));
     m_chooser.addOption("Six Seconds, Half Power", new TimedDrive(6, .5));
     m_chooser.addOption("Go Forward 25 inches", new autoDrive(25));
     // m_chooser.addOption("Pathfinder Test", new PathDrive(Paths.straightPoints, Paths.configSlow));
@@ -59,14 +61,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-
+    m_DriveBase.update();
     double deltaLeft = m_DriveBase.getLeftTicks() - oldLeftTicks;
     double deltaRight = m_DriveBase.getRightTicks() - oldRightTicks;
     distance = (deltaLeft + deltaRight)/2.0;
     //System.out.println("Lwft Gyro: " + Math.cos(Math.toRadians(m_DriveBase.getGyro())) + "Right Gyro" + Math.sin(Math.toRadians(m_DriveBase.getGyro())) + " Left Ticks: " + m_DriveBase.getLeftTicks() + " Right Ticks: " + m_DriveBase.getRightTicks());
     System.out.println(distance);
-    RobotMap.x_Location += distance * Math.cos(Math.toRadians(m_DriveBase.getGyro()));
-    RobotMap.y_Location += distance * Math.sin(Math.toRadians(m_DriveBase.getGyro()));
+    RobotMap.x_Location += distance * Math.sin(Math.toRadians(90 - m_DriveBase.getGyro()));
+    RobotMap.y_Location += distance * Math.cos(Math.toRadians(90 - m_DriveBase.getGyro()));
     System.out.printf("Distance: %f X Location: %f Y Location: %f \n", distance, RobotMap.x_Location, RobotMap.y_Location);
     oldLeftTicks = m_DriveBase.getLeftTicks();
     oldRightTicks = m_DriveBase.getRightTicks();
@@ -74,6 +76,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Gyro value",m_DriveBase.getGyro());
     SmartDashboard.putNumber("Left Ticks", m_DriveBase.getLeftTicks());
     SmartDashboard.putNumber("Right Ticks", m_DriveBase.getRightTicks());
+    SmartDashboard.putNumber("Left Velocity", m_DriveBase.lVelocity);
+    SmartDashboard.putNumber("Right Velocity", m_DriveBase.rVelocity);
   }
 
   /**
@@ -83,6 +87,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+
   }
 
   @Override
@@ -104,7 +109,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     autonomousCommand = m_chooser.getSelected();
-		Robot.m_DriveBase.resetLeftEncoder();
+    Robot.m_DriveBase.resetLeftEncoder();
     Robot.m_DriveBase.resetRightEncoder();
     Robot.m_DriveBase.resetGyro();
     

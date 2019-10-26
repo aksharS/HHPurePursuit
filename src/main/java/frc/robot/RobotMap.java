@@ -29,6 +29,10 @@ public static double driveI = 0.00;
 public static double driveD = 0.00;
 
 public static double x_Location, y_Location = 0;
+public static double kVelocityConstant = .05;
+public static double kPursuitPorportionalConstant = .03;
+
+public static double trackWidth = 21.5;
 
 public static int leftEncoderPort1 = 0;
 public static int leftEncoderPort2 = 1;

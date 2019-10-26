@@ -8,8 +8,7 @@ public class Path {
 	private WayPoint[] smoothedPoints;
 	private int idxOfLastClosestPoint = 0;
 
-	public Path(WayPoint[] unsmoothedPoints, double a, double b, double tolerance, double maxRobotVelocity,
-			double curvatureCompensation) {
+	public Path(WayPoint[] unsmoothedPoints, double a, double b, double tolerance, double maxRobotVelocity, double curvatureCompensation) {
 		this.setunsmoothedPoints(unsmoothedPoints);
 
 		WayPoint[] smoothedPoints = unsmoothedPoints.clone();

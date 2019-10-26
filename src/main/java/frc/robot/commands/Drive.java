@@ -23,7 +23,7 @@ public class Drive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double moveAxis = Robot.m_oi.getDriveJoystick().getRawAxis(1);
+    double moveAxis = -Robot.m_oi.getDriveJoystick().getRawAxis(1);
     double turnAxis = Robot.m_oi.getDriveJoystick().getRawAxis(2);
     
     // System.out.println(moveAxis + " " + turnAxis);

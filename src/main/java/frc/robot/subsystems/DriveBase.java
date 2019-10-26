@@ -7,10 +7,7 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.ADXL345_SPI;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -35,6 +32,14 @@ public class DriveBase extends Subsystem {
   WPI_TalonSRX backLeft = new WPI_TalonSRX(RobotMap.BackLeftTalonPort);
   WPI_TalonSRX backRight = new WPI_TalonSRX(RobotMap.BackRightTalonPort);
 
+  private double lastTime = Timer.getFPGATimestamp();
+  public static double lastLeftVelocity = 0.0;
+  public static double lastRightVelocity = 0.0;
+  public static double lastLeftEncoder = 0.0;
+  public static double lastRightEncoder = 0.0;
+  public static double lVelocity;
+  public static double rVelocity;
+
   Encoder leftEncoder = new Encoder(0, 1);
   Encoder rightEncoder = new Encoder(2, 3);
 
@@ -46,6 +51,27 @@ public class DriveBase extends Subsystem {
   DifferentialDrive dDrive = new DifferentialDrive(leftMotors, rightMotors);
 
   private double sensitivity = 1;
+
+  public void update(){
+    double currentTime = Timer.getFPGATimestamp();
+    double dt = currentTime - lastTime;
+
+    // Update velocity
+    double dl = getLeftTicks() - lastLeftEncoder;
+    double dr = getRightTicks() - lastRightEncoder;
+    lVelocity = dl/dt;
+    rVelocity = dr/dt;
+  }
+
+  public void reset() {
+    lastTime = Timer.getFPGATimestamp();
+    resetLeftEncoder();
+    resetRightEncoder();
+    lastLeftEncoder = 0.0;
+    lastRightEncoder = 0.0;
+    lastLeftVelocity = 0.0;
+    lastRightVelocity = 0.0;
+  }
 
   public DriveBase(double s) {
     sensitivity = s;
@@ -70,8 +96,6 @@ public class DriveBase extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
     setDefaultCommand(new Drive());
   }
 

@@ -6,6 +6,7 @@ import frc.robot.PurePursuit.Path;
 import frc.robot.PurePursuit.Vector;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.subsystems.DriveBase;
 
 public class PursuitDrive extends Command {
     private Path path;
@@ -67,6 +68,13 @@ public class PursuitDrive extends Command {
             System.out.println("curvature: " + curvature);
             System.out.println("targetLeftWheelVelocity: " + targetLeftWheelVelocity);
             System.out.println("targetRightWheelVelocity: " + targetRightWheelVelocity);
+
+            double leftFeedForward = (RobotMap.kVelocityConstant * targetLeftWheelVelocity);
+            double rightFeedForward = (RobotMap.kVelocityConstant * targetRightWheelVelocity);
+            double leftFeedBackward = RobotMap.kPursuitPorportionalConstant * (leftFeedForward - DriveBase.lVelocity);
+            double rightFeedBackward = RobotMap.kPursuitPorportionalConstant * (rightFeedForward - DriveBase.rVelocity);
+
+            Robot.m_DriveBase.driveBaseTank((leftFeedBackward + leftFeedForward), (rightFeedBackward + rightFeedForward));
 
             long endTime = System.currentTimeMillis();
             System.out.println("That took " + (endTime - startTime) + " milliseconds");
