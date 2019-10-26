@@ -114,7 +114,7 @@ public class Path {
 			double t = 0;
 
 			if (discriminant < 0) {
-				System.out.println("No Intersection");
+				//System.out.println("No Intersection");
 			} else {
 				discriminant = Math.sqrt(discriminant);
 				double t1 = (-b - discriminant) / (2 * a);
@@ -133,5 +133,13 @@ public class Path {
 		}
 		return new CoordinatePoint((startPointofSegment.getX() + d.getXComponent()),
 				(startPointofSegment.getY() + d.getYComponent()));
+	}
+
+	public String toString(){
+		String output = ("Current Path: ");
+		for(WayPoint W : this.smoothedPoints){
+			output.concat(W.getPoint().toString() + "\n");
+		}
+		return output;
 	}
 }

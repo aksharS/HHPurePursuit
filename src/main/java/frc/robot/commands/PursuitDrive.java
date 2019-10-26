@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.PurePursuit.CoordinatePoint;
 import frc.robot.PurePursuit.Path;
 import frc.robot.PurePursuit.Vector;
@@ -68,12 +69,15 @@ public class PursuitDrive extends Command {
             System.out.println("curvature: " + curvature);
             System.out.println("targetLeftWheelVelocity: " + targetLeftWheelVelocity);
             System.out.println("targetRightWheelVelocity: " + targetRightWheelVelocity);
+            System.out.println(path.toString());
 
             double leftFeedForward = (RobotMap.kVelocityConstant * targetLeftWheelVelocity);
             double rightFeedForward = (RobotMap.kVelocityConstant * targetRightWheelVelocity);
             double leftFeedBackward = RobotMap.kPursuitPorportionalConstant * (leftFeedForward - DriveBase.lVelocity);
             double rightFeedBackward = RobotMap.kPursuitPorportionalConstant * (rightFeedForward - DriveBase.rVelocity);
 
+            SmartDashboard.putNumber("Left Value", (leftFeedBackward + leftFeedForward));
+            SmartDashboard.putNumber("Right Value", (rightFeedBackward + rightFeedForward));
             Robot.m_DriveBase.driveBaseTank((leftFeedBackward + leftFeedForward), (rightFeedBackward + rightFeedForward));
 
             long endTime = System.currentTimeMillis();

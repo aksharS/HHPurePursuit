@@ -61,6 +61,10 @@ public class DriveBase extends Subsystem {
     double dr = getRightTicks() - lastRightEncoder;
     lVelocity = dl/dt;
     rVelocity = dr/dt;
+
+    lastTime = currentTime;
+    lastLeftEncoder = getLeftTicks();
+    lastRightEncoder = getRightTicks();
   }
 
   public void reset() {
@@ -86,12 +90,12 @@ public class DriveBase extends Subsystem {
 
   public double getLeftTicks(){
     //return -leftEncoder.get();
-     return (-leftEncoder.get() / (RobotMap.ticksPerRevolution/RobotMap.wheelCircumference));
+     return (leftEncoder.get() / (RobotMap.ticksPerRevolution/RobotMap.wheelCircumference));
   }
 
   public double getRightTicks(){
     // return rightEncoder.get();
-    return (rightEncoder.get() /  (RobotMap.ticksPerRevolution/RobotMap.wheelCircumference));
+    return (-rightEncoder.get() /  (RobotMap.ticksPerRevolution/RobotMap.wheelCircumference));
   }
 
   @Override
@@ -108,7 +112,7 @@ public void resetRightEncoder() {
 }
 
 public double getGyro() {
-  return gyro.getAngle() % 360;
+  return 90 - (gyro.getAngle() % 360);
 }
 
 public void resetGyro() {

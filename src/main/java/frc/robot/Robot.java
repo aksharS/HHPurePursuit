@@ -67,8 +67,8 @@ public class Robot extends TimedRobot {
     distance = (deltaLeft + deltaRight)/2.0;
     //System.out.println("Lwft Gyro: " + Math.cos(Math.toRadians(m_DriveBase.getGyro())) + "Right Gyro" + Math.sin(Math.toRadians(m_DriveBase.getGyro())) + " Left Ticks: " + m_DriveBase.getLeftTicks() + " Right Ticks: " + m_DriveBase.getRightTicks());
     System.out.println(distance);
-    RobotMap.x_Location += distance * Math.sin(Math.toRadians(90 - m_DriveBase.getGyro()));
-    RobotMap.y_Location += distance * Math.cos(Math.toRadians(90 - m_DriveBase.getGyro()));
+    RobotMap.x_Location += distance * Math.cos(Math.toRadians(m_DriveBase.getGyro()));
+    RobotMap.y_Location += distance * Math.sin(Math.toRadians(m_DriveBase.getGyro()));
     System.out.printf("Distance: %f X Location: %f Y Location: %f \n", distance, RobotMap.x_Location, RobotMap.y_Location);
     oldLeftTicks = m_DriveBase.getLeftTicks();
     oldRightTicks = m_DriveBase.getRightTicks();
@@ -76,6 +76,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Gyro value",m_DriveBase.getGyro());
     SmartDashboard.putNumber("Left Ticks", m_DriveBase.getLeftTicks());
     SmartDashboard.putNumber("Right Ticks", m_DriveBase.getRightTicks());
+    SmartDashboard.putNumber("X Location", RobotMap.x_Location);
+    SmartDashboard.putNumber("Y Location", RobotMap.y_Location);
     SmartDashboard.putNumber("Left Velocity", m_DriveBase.lVelocity);
     SmartDashboard.putNumber("Right Velocity", m_DriveBase.rVelocity);
   }

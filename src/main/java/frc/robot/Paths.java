@@ -19,18 +19,18 @@ public class Paths {
     };
 
     public static final WayPoint[] straightTest = {
-            new WayPoint(5,0),
-            new WayPoint(10,0),
-            new WayPoint(15,0),
-            new WayPoint(20,0),
-            new WayPoint(25,0),
-            new WayPoint(30,0),
-            new WayPoint(35,0),
-            new WayPoint(40,0),
-            new WayPoint(45,0),
-            new WayPoint(50,0),
-            new WayPoint(55,0),
-            new WayPoint(60,0),
+            new WayPoint(0,5),
+            new WayPoint(5,10),
+            new WayPoint(0,15),
+            new WayPoint(5,20),
+            new WayPoint(0,25),
+            new WayPoint(5,30),
+            new WayPoint(0,35),
+            new WayPoint(5,40),
+            new WayPoint(0,45),
+            new WayPoint(5,50),
+            new WayPoint(0,55),
+            new WayPoint(0,60)
     };
 
     public static Path getStraightPath(){
