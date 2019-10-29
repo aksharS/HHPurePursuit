@@ -77,8 +77,8 @@ public class PursuitDrive extends Command {
             double leftFeedBackward = RobotMap.kPursuitPorportionalConstant * (leftFeedForward - DriveBase.lVelocity);
             double rightFeedBackward = RobotMap.kPursuitPorportionalConstant * (rightFeedForward - DriveBase.rVelocity);
 
-            SmartDashboard.putNumber("Left Value", (leftFeedBackward + leftFeedForward));
-            SmartDashboard.putNumber("Right Value", (rightFeedBackward + rightFeedForward));
+            System.out.println("Left Output: " + (leftFeedBackward + leftFeedForward));
+            System.out.println("Right Output: " + (rightFeedBackward + rightFeedForward) + "\n");
             Robot.m_DriveBase.driveBaseTank((leftFeedBackward + leftFeedForward), (rightFeedBackward + rightFeedForward));
 
             long endTime = System.currentTimeMillis();

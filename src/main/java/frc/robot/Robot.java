@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
     System.out.println(distance);
     RobotMap.x_Location += distance * Math.cos(Math.toRadians(m_DriveBase.getGyro()));
     RobotMap.y_Location += distance * Math.sin(Math.toRadians(m_DriveBase.getGyro()));
-    System.out.printf("Distance: %f X Location: %f Y Location: %f \n", distance, RobotMap.x_Location, RobotMap.y_Location);
+    //System.out.printf("Distance: %f X Location: %f Y Location: %f \n", distance, RobotMap.x_Location, RobotMap.y_Location);
     oldLeftTicks = m_DriveBase.getLeftTicks();
     oldRightTicks = m_DriveBase.getRightTicks();
 

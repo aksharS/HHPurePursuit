@@ -54,6 +54,7 @@ public class DriveBase extends Subsystem {
 
   public void update(){
     double currentTime = Timer.getFPGATimestamp();
+    System.out.println(currentTime);
     double dt = currentTime - lastTime;
 
     // Update velocity
@@ -120,7 +121,6 @@ public void resetGyro() {
 }
 
 public void driveBaseTank(double d, double e) {
-  System.out.printf("Left 5f Right 5f", d, e);
   leftMotors.set(d);
   rightMotors.set(e);
 }

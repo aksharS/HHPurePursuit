@@ -20,15 +20,15 @@ public class Paths {
 
     public static final WayPoint[] straightTest = {
             new WayPoint(0,5),
-            new WayPoint(5,10),
+            new WayPoint(0,10),
             new WayPoint(0,15),
-            new WayPoint(5,20),
+            new WayPoint(0,20),
             new WayPoint(0,25),
-            new WayPoint(5,30),
+            new WayPoint(0,30),
             new WayPoint(0,35),
-            new WayPoint(5,40),
+            new WayPoint(0,40),
             new WayPoint(0,45),
-            new WayPoint(5,50),
+            new WayPoint(0,50),
             new WayPoint(0,55),
             new WayPoint(0,60)
     };
