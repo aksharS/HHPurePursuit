@@ -122,7 +122,7 @@ public void resetGyro() {
 
 public void driveBaseTank(double d, double e) {
   leftMotors.set(d);
-  rightMotors.set(e);
+  rightMotors.set(-e);
 }
 
 public void setAllCoast(){

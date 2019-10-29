@@ -36,7 +36,21 @@ public class PursuitDrive extends Command {
     @Override
     protected void execute() {
         CoordinatePoint robotLocation = new CoordinatePoint(RobotMap.x_Location, RobotMap.y_Location);
+        double distance = 0, previousDistance = 0, oldLeftTicks = 0, oldRightTicks = 0;
         while (path.closestPointTo(robotLocation) != path.getSmoothedPoints()[path.getSmoothedPoints().length-1]) {
+            Robot.m_DriveBase.update();
+
+            double deltaLeft = Robot.m_DriveBase.getLeftTicks() - oldLeftTicks;
+            double deltaRight = Robot.m_DriveBase.getRightTicks() - oldRightTicks;
+            distance = (deltaLeft + deltaRight)/2.0;
+            //System.out.println("Lwft Gyro: " + Math.cos(Math.toRadians(m_DriveBase.getGyro())) + "Right Gyro" + Math.sin(Math.toRadians(m_DriveBase.getGyro())) + " Left Ticks: " + m_DriveBase.getLeftTicks() + " Right Ticks: " + m_DriveBase.getRightTicks());
+            System.out.println(distance);
+            RobotMap.x_Location += distance * Math.cos(Math.toRadians(Robot.m_DriveBase.getGyro()));
+            RobotMap.y_Location += distance * Math.sin(Math.toRadians(Robot.m_DriveBase.getGyro()));
+            //System.out.printf("Distance: %f X Location: %f Y Location: %f \n", distance, RobotMap.x_Location, RobotMap.y_Location);
+            oldLeftTicks = Robot.m_DriveBase.getLeftTicks();
+            oldRightTicks = Robot.m_DriveBase.getRightTicks();
+
             long startTime = System.currentTimeMillis();
 
             robotLocation.setCoordinatePoint(RobotMap.x_Location, RobotMap.y_Location);
@@ -72,17 +86,24 @@ public class PursuitDrive extends Command {
             System.out.println("targetRightWheelVelocity: " + targetRightWheelVelocity);
             System.out.println(path.toString());
 
-            double leftFeedForward = (RobotMap.kVelocityConstant * targetLeftWheelVelocity);
-            double rightFeedForward = (RobotMap.kVelocityConstant * targetRightWheelVelocity);
-            double leftFeedBackward = RobotMap.kPursuitPorportionalConstant * (leftFeedForward - DriveBase.lVelocity);
-            double rightFeedBackward = RobotMap.kPursuitPorportionalConstant * (rightFeedForward - DriveBase.rVelocity);
+//            double leftFeedForward = (RobotMap.kVelocityConstant * targetLeftWheelVelocity);
+//            double rightFeedForward = (RobotMap.kVelocityConstant * targetRightWheelVelocity);
+//            double leftFeedBackward = RobotMap.kPursuitPorportionalConstant * (leftFeedForward - DriveBase.lVelocity);
+//            double rightFeedBackward = RobotMap.kPursuitPorportionalConstant * (rightFeedForward - DriveBase.rVelocity);
+//
+//            System.out.println("Left Output: " + (leftFeedBackward + leftFeedForward));
+//            System.out.println("Right Output: " + (rightFeedBackward + rightFeedForward) + "\n");
+//            Robot.m_DriveBase.driveBaseTank((leftFeedBackward + leftFeedForward), (rightFeedBackward + rightFeedForward));
 
-            System.out.println("Left Output: " + (leftFeedBackward + leftFeedForward));
-            System.out.println("Right Output: " + (rightFeedBackward + rightFeedForward) + "\n");
-            Robot.m_DriveBase.driveBaseTank((leftFeedBackward + leftFeedForward), (rightFeedBackward + rightFeedForward));
+            double leftOutput = (targetLeftWheelVelocity - DriveBase.lVelocity) * RobotMap.kVelocityConstant * .5;
+            double rightOutput = (targetRightWheelVelocity - DriveBase.rVelocity) * RobotMap.kVelocityConstant * .5;
+            Robot.m_DriveBase.driveBaseTank(leftOutput, rightOutput);
+
+            System.out.println("Left Output: " + leftOutput);
+            System.out.println("Right Output: " + rightOutput);
 
             long endTime = System.currentTimeMillis();
-            System.out.println("That took " + (endTime - startTime) + " milliseconds");
+            System.out.println("That took " + (endTime - startTime) + " milliseconds\n");
         }
     }
 

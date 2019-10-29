@@ -29,7 +29,6 @@ public class Robot extends TimedRobot {
   public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
   public static OI m_oi;
   public static DriveBase m_DriveBase = new DriveBase(1);
-  private double distance, previousDistance, oldLeftTicks, oldRightTicks = 0;
   
   Command autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -62,17 +61,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     m_DriveBase.update();
-    double deltaLeft = m_DriveBase.getLeftTicks() - oldLeftTicks;
-    double deltaRight = m_DriveBase.getRightTicks() - oldRightTicks;
-    distance = (deltaLeft + deltaRight)/2.0;
-    //System.out.println("Lwft Gyro: " + Math.cos(Math.toRadians(m_DriveBase.getGyro())) + "Right Gyro" + Math.sin(Math.toRadians(m_DriveBase.getGyro())) + " Left Ticks: " + m_DriveBase.getLeftTicks() + " Right Ticks: " + m_DriveBase.getRightTicks());
-    System.out.println(distance);
-    RobotMap.x_Location += distance * Math.cos(Math.toRadians(m_DriveBase.getGyro()));
-    RobotMap.y_Location += distance * Math.sin(Math.toRadians(m_DriveBase.getGyro()));
-    //System.out.printf("Distance: %f X Location: %f Y Location: %f \n", distance, RobotMap.x_Location, RobotMap.y_Location);
-    oldLeftTicks = m_DriveBase.getLeftTicks();
-    oldRightTicks = m_DriveBase.getRightTicks();
-
     SmartDashboard.putNumber("Gyro value",m_DriveBase.getGyro());
     SmartDashboard.putNumber("Left Ticks", m_DriveBase.getLeftTicks());
     SmartDashboard.putNumber("Right Ticks", m_DriveBase.getRightTicks());
@@ -80,6 +68,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Y Location", RobotMap.y_Location);
     SmartDashboard.putNumber("Left Velocity", m_DriveBase.lVelocity);
     SmartDashboard.putNumber("Right Velocity", m_DriveBase.rVelocity);
+
   }
 
   /**
@@ -144,8 +133,6 @@ public class Robot extends TimedRobot {
     System.out.println("Teleop enabled");
     RobotMap.x_Location = 0;
     RobotMap.y_Location = 0;
-    distance = 0;
-    previousDistance = 0;
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
