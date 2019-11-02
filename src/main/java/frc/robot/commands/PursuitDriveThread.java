@@ -26,7 +26,7 @@ public class PursuitDriveThread extends Command {
     protected void initialize() {
 		Timer time = new Timer(); // Instantiate Timer Object
 		PurePursuitThread pursuitThread = new PurePursuitThread("thread1", path);	
-		time.scheduleAtFixedRate(pursuitThread, 0, 5); //TimedTask is run periodically
+		time.scheduleAtFixedRate(pursuitThread, 0, 50); //TimedTask is run periodically
     }
 
     /**
