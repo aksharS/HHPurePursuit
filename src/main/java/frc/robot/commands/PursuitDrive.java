@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.PurePursuit.CoordinatePoint;
 import frc.robot.PurePursuit.Path;
 import frc.robot.PurePursuit.Vector;
@@ -43,7 +42,7 @@ public class PursuitDrive extends Command {
             double deltaLeft = Robot.m_DriveBase.getLeftTicks() - oldLeftTicks;
             double deltaRight = Robot.m_DriveBase.getRightTicks() - oldRightTicks;
             distance = (deltaLeft + deltaRight)/2.0;
-            //System.out.println("Lwft Gyro: " + Math.cos(Math.toRadians(m_DriveBase.getGyro())) + "Right Gyro" + Math.sin(Math.toRadians(m_DriveBase.getGyro())) + " Left Ticks: " + m_DriveBase.getLeftTicks() + " Right Ticks: " + m_DriveBase.getRightTicks());
+            //System.out.println("Left Gyro: " + Math.cos(Math.toRadians(m_DriveBase.getGyro())) + "Right Gyro" + Math.sin(Math.toRadians(m_DriveBase.getGyro())) + " Left Ticks: " + m_DriveBase.getLeftTicks() + " Right Ticks: " + m_DriveBase.getRightTicks());
             System.out.println(distance);
             RobotMap.x_Location += distance * Math.cos(Math.toRadians(Robot.m_DriveBase.getGyro()));
             RobotMap.y_Location += distance * Math.sin(Math.toRadians(Robot.m_DriveBase.getGyro()));
