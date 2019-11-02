@@ -36,19 +36,8 @@ public class PursuitDrive extends Command {
     @Override
     protected void execute() {
         CoordinatePoint robotLocation = new CoordinatePoint(RobotMap.x_Location, RobotMap.y_Location);
-        double distance = 0, previousDistance = 0, oldLeftTicks = 0, oldRightTicks = 0;
         while (path.closestPointTo(robotLocation) != path.getSmoothedPoints()[path.getSmoothedPoints().length-1]) {
             Robot.m_DriveBase.update();
-
-            double deltaLeft = Robot.m_DriveBase.getLeftTicks() - oldLeftTicks;
-            double deltaRight = Robot.m_DriveBase.getRightTicks() - oldRightTicks;
-            distance = (deltaLeft + deltaRight)/2.0;
-            //System.out.println("Lwft Gyro: " + Math.cos(Math.toRadians(m_DriveBase.getGyro())) + "Right Gyro" + Math.sin(Math.toRadians(m_DriveBase.getGyro())) + " Left Ticks: " + m_DriveBase.getLeftTicks() + " Right Ticks: " + m_DriveBase.getRightTicks());
-            RobotMap.x_Location += distance * Math.cos(Math.toRadians(Robot.m_DriveBase.getGyro()));
-            RobotMap.y_Location += distance * Math.sin(Math.toRadians(Robot.m_DriveBase.getGyro()));
-            //System.out.printf("Distance: %f X Location: %f Y Location: %f \n", distance, RobotMap.x_Location, RobotMap.y_Location);
-            oldLeftTicks = Robot.m_DriveBase.getLeftTicks();
-            oldRightTicks = Robot.m_DriveBase.getRightTicks();
 
             long startTime = System.currentTimeMillis();
 

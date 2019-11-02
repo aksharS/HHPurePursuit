@@ -29,7 +29,7 @@ public static double driveI = 0.00;
 public static double kDriveD = 0;
 
 public static double x_Location, y_Location = 0;
-public static double kVelocityConstant = .04;
+public static double kVelocityConstant = .0325;
 
 public static double trackWidth = 21.5;
 
