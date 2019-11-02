@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.PurePursuit.CoordinatePoint;
 import frc.robot.PurePursuit.Path;
 import frc.robot.PurePursuit.Vector;
@@ -64,7 +63,7 @@ public class PursuitDrive extends Command {
             double targetRobotVelocity = path.closestPointTo(robotLocation).getTargetVelocityAtPoint();
             double targetLeftWheelVelocity = targetRobotVelocity * (2 + signedCurvature * robotTrackWidth) / 2.0;
             double targetRightWheelVelocity = targetRobotVelocity * (2 - signedCurvature * robotTrackWidth) / 2.0;
-            
+
             System.out.println("robotLocation: " + robotLocation);
             System.out.println("targetRobotVelocity: " + targetRobotVelocity);
             System.out.println("lookAheadPoint: " + lookAheadPoint);

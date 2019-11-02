@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.OI;
 import frc.robot.Robot;
 
 public class Drive extends Command {
@@ -23,8 +24,8 @@ public class Drive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double moveAxis = -Robot.m_oi.getDriveJoystick().getRawAxis(1);
-    double turnAxis = Robot.m_oi.getDriveJoystick().getRawAxis(2);
+    double moveAxis = -OI.getDriveJoystick().getRawAxis(1);
+    double turnAxis = OI.getDriveJoystick().getRawAxis(2);
     
     // System.out.println(moveAxis + " " + turnAxis);
     Robot.m_DriveBase.arcadeDrive(moveAxis, -turnAxis);
