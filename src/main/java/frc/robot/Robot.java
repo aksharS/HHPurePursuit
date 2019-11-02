@@ -43,7 +43,8 @@ public class Robot extends TimedRobot {
     m_DriveBase.resetRightEncoder();
     m_oi = new OI();
     m_DriveBase.reset();
-    m_chooser.setDefaultOption("PurePursuit Test", new PursuitDrive(Paths.getStraightPath(), RobotMap.trackWidth + 1, 10));
+    m_chooser.setDefaultOption("PurePursuit Rocket", new PursuitDrive(Paths.getRightHabRocket(), RobotMap.trackWidth + 1, 10));
+    m_chooser.addOption("PurePursuit Straight", new PursuitDrive(Paths.getStraightPath(), RobotMap.trackWidth + 1, 10));
     m_chooser.addOption("Six Seconds, Half Power", new TimedDrive(6, .5));
     m_chooser.addOption("Go Forward 25 inches", new autoDrive(25));
     // m_chooser.addOption("Pathfinder Test", new PathDrive(Paths.straightPoints, Paths.configSlow));

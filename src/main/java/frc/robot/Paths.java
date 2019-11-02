@@ -15,7 +15,8 @@ public class Paths {
             new WayPoint(65, 50),
             new WayPoint(75, 55),
             new WayPoint(85, 60),
-            new WayPoint(90, 68)
+            new WayPoint(90, 68),
+            new WayPoint(95, 76)
     };
 
     public static final WayPoint[] straightTest = {
@@ -36,4 +37,6 @@ public class Paths {
     public static Path getStraightPath(){
         return new Path(straightTest, 1, 0 , 0.01, 10, .1);
     }
+
+    public static Path getRightHabRocket() {return new Path(rightHabRightRocket, 1, 0 , 0.01, 10, .1); }
 }

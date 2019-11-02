@@ -10,12 +10,12 @@ public class autoDrive extends PIDCommand {
     private double slowDown = .7;
 
     public autoDrive(double inches) {
-        super(RobotMap.driveP, RobotMap.driveI, RobotMap.driveD);
+        super(RobotMap.kDriveP, RobotMap.driveI, RobotMap.kDriveD);
         setSetpoint(inches);
     }
 
     public autoDrive(double inches, double speed) {
-        super(RobotMap.driveP, RobotMap.driveI, RobotMap.driveD);
+        super(RobotMap.kDriveP, RobotMap.driveI, RobotMap.kDriveD);
 
         setSetpoint(inches);
         this.slowDown = speed;

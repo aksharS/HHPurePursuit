@@ -24,13 +24,12 @@ public static int BackRightTalonPort = 2;
 public static double ticksPerRevolution = 128.1;
 public static double wheelCircumference = 20.25; // Inches
 
-public static double driveP = 0.05;
+public static double kDriveP = 0.04;
 public static double driveI = 0.00;
-public static double driveD = 0.00;
+public static double kDriveD = 0;
 
 public static double x_Location, y_Location = 0;
-public static double kVelocityConstant = .05;
-public static double kPursuitPorportionalConstant = .015;
+public static double kVelocityConstant = .04;
 
 public static double trackWidth = 21.5;
 

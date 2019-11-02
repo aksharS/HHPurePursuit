@@ -44,7 +44,6 @@ public class PursuitDrive extends Command {
             double deltaRight = Robot.m_DriveBase.getRightTicks() - oldRightTicks;
             distance = (deltaLeft + deltaRight)/2.0;
             //System.out.println("Lwft Gyro: " + Math.cos(Math.toRadians(m_DriveBase.getGyro())) + "Right Gyro" + Math.sin(Math.toRadians(m_DriveBase.getGyro())) + " Left Ticks: " + m_DriveBase.getLeftTicks() + " Right Ticks: " + m_DriveBase.getRightTicks());
-            System.out.println(distance);
             RobotMap.x_Location += distance * Math.cos(Math.toRadians(Robot.m_DriveBase.getGyro()));
             RobotMap.y_Location += distance * Math.sin(Math.toRadians(Robot.m_DriveBase.getGyro()));
             //System.out.printf("Distance: %f X Location: %f Y Location: %f \n", distance, RobotMap.x_Location, RobotMap.y_Location);
@@ -59,7 +58,7 @@ public class PursuitDrive extends Command {
             Vector unitRobotY = new Vector(Math.cos(angle), Math.sin(angle));
             Vector unitRobotX = new Vector(Math.sin(angle), -Math.cos(angle));
 
-            CoordinatePoint lookAheadPoint = path.findLookaheadPoint(robotLocation, 10.0);
+            CoordinatePoint lookAheadPoint = path.findLookaheadPoint(robotLocation, 10);
             Vector l = new Vector(robotLocation, lookAheadPoint);
 
             double x = l.proj(unitRobotX);
@@ -67,6 +66,11 @@ public class PursuitDrive extends Command {
 
             double signedCurvature = (2 * x) / (l.getmagnitude() * l.getmagnitude());
             double curvature = Math.abs(signedCurvature);
+
+            if (curvature < 0.1) {
+                signedCurvature = 0; // If curvature is low enough, have robot go straight
+                curvature = 0;
+            }
 
             double targetRobotVelocity = path.closestPointTo(robotLocation).getTargetVelocityAtPoint();
             double targetLeftWheelVelocity = targetRobotVelocity * (2 + signedCurvature * robotTrackWidth) / 2.0;
@@ -84,6 +88,8 @@ public class PursuitDrive extends Command {
             System.out.println("curvature: " + curvature);
             System.out.println("targetLeftWheelVelocity: " + targetLeftWheelVelocity);
             System.out.println("targetRightWheelVelocity: " + targetRightWheelVelocity);
+            System.out.println("Left Velocity: " + DriveBase.lVelocity + " Right Velocity: " + DriveBase.rVelocity);
+            System.out.println("Left Acceleration: " + DriveBase.lAcceleration + " Right Acceleration: " + DriveBase.rAcceleration);
             System.out.println(path.toString());
 
 //            double leftFeedForward = (RobotMap.kVelocityConstant * targetLeftWheelVelocity);
@@ -95,15 +101,15 @@ public class PursuitDrive extends Command {
 //            System.out.println("Right Output: " + (rightFeedBackward + rightFeedForward) + "\n");
 //            Robot.m_DriveBase.driveBaseTank((leftFeedBackward + leftFeedForward), (rightFeedBackward + rightFeedForward));
 
-            double leftOutput = (targetLeftWheelVelocity - DriveBase.lVelocity) * RobotMap.kVelocityConstant * .5;
-            double rightOutput = (targetRightWheelVelocity - DriveBase.rVelocity) * RobotMap.kVelocityConstant * .5;
+            double leftOutput = ((targetLeftWheelVelocity - DriveBase.lVelocity) * RobotMap.kVelocityConstant * .5) + (RobotMap.kDriveD * (DriveBase.lAcceleration));
+            double rightOutput = ((targetRightWheelVelocity - DriveBase.rVelocity) * RobotMap.kVelocityConstant * .5) + (RobotMap.kDriveD * (DriveBase.rAcceleration));
             Robot.m_DriveBase.driveBaseTank(leftOutput, rightOutput);
 
             System.out.println("Left Output: " + leftOutput);
             System.out.println("Right Output: " + rightOutput);
 
             long endTime = System.currentTimeMillis();
-            System.out.println("That took " + (endTime - startTime) + " milliseconds\n");
+            System.out.println("That took " + (endTime - startTime) + " milliseconds\n\n\n");
         }
     }
 

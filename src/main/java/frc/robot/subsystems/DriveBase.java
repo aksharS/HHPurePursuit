@@ -33,12 +33,12 @@ public class DriveBase extends Subsystem {
   WPI_TalonSRX backRight = new WPI_TalonSRX(RobotMap.BackRightTalonPort);
 
   private double lastTime = Timer.getFPGATimestamp();
-  public static double lastLeftVelocity = 0.0;
-  public static double lastRightVelocity = 0.0;
-  public static double lastLeftEncoder = 0.0;
-  public static double lastRightEncoder = 0.0;
-  public static double lVelocity;
-  public static double rVelocity;
+  private static double lastLeftVelocity = 0.0;
+  private static double lastRightVelocity = 0.0;
+  private static double lastLeftEncoder = 0.0;
+  private static double lastRightEncoder = 0.0;
+  public static double lVelocity, rVelocity;
+  public static double lAcceleration, rAcceleration;
 
   Encoder leftEncoder = new Encoder(0, 1);
   Encoder rightEncoder = new Encoder(2, 3);
@@ -51,10 +51,10 @@ public class DriveBase extends Subsystem {
   DifferentialDrive dDrive = new DifferentialDrive(leftMotors, rightMotors);
 
   private double sensitivity = 1;
+  private double deadzone = .05;
 
   public void update(){
     double currentTime = Timer.getFPGATimestamp();
-    System.out.println(currentTime);
     double dt = currentTime - lastTime;
 
     // Update velocity
@@ -63,9 +63,18 @@ public class DriveBase extends Subsystem {
     lVelocity = dl/dt;
     rVelocity = dr/dt;
 
+    double dlv = lVelocity - lastLeftVelocity;
+    double drv = rVelocity - lastRightVelocity;
+
+    // Update acceleration
+    lAcceleration = dlv/dt;
+    rAcceleration = drv/dt;
+
     lastTime = currentTime;
     lastLeftEncoder = getLeftTicks();
     lastRightEncoder = getRightTicks();
+    lastLeftVelocity = lVelocity;
+    lastRightVelocity = rVelocity;
   }
 
   public void reset() {
@@ -74,19 +83,25 @@ public class DriveBase extends Subsystem {
     resetRightEncoder();
     lastLeftEncoder = 0.0;
     lastRightEncoder = 0.0;
-    lastLeftVelocity = 0.0;
-    lastRightVelocity = 0.0;
+    lVelocity = rVelocity = 0.0;
+    lAcceleration = rAcceleration = 0.0;
   }
 
   public DriveBase(double s) {
     sensitivity = s;
     leftEncoder.reset();
     rightEncoder.reset();
+    frontLeft.setSafetyEnabled(false);
+    frontRight.setSafetyEnabled(false);
+    backLeft.setSafetyEnabled(false);
+    backRight.setSafetyEnabled(false);
   }
 
   public void arcadeDrive(double moveSpeed, double rotateSpeed){
     // System.out.printf("Sending Arcade Drive Command with %f moveSpeed and %f turnSpeed \n", moveSpeed, rotateSpeed);
-    dDrive.arcadeDrive(moveSpeed*sensitivity, -rotateSpeed*sensitivity);
+    if (Math.abs(moveSpeed) > deadzone || Math.abs(rotateSpeed) > deadzone) {
+      dDrive.arcadeDrive(moveSpeed * sensitivity, -rotateSpeed * sensitivity);
+    }
   }
 
   public double getLeftTicks(){
